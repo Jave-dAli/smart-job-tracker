@@ -1,4 +1,4 @@
-CREATE TABLE file_uploads (
+CREATE TABLE IF NOT EXISTS file_uploads (
 
                               id BIGSERIAL PRIMARY KEY,
 

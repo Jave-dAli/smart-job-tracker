@@ -1,5 +1,10 @@
 spring:
 
+  security:
+    user:
+      name: javed
+      password: j@123
+
   datasource:
     url: jdbc:postgresql://localhost:5432/smartjobtracker
     username: postgres
@@ -23,3 +28,7 @@ spring:
 
 server:
   port: 8080
+
+jwt:
+  secret: "I am creating abra ka dabra the magician s3cr3t k3y"
+  expiration: 86400000

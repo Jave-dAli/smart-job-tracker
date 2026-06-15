@@ -1,4 +1,4 @@
-package com.javed.smartjobtracker.controller;
+package com.javed.smartjobtracker;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -16,5 +16,9 @@ public class HealthController {
                 "status", "UP",
                 "timestamp", Instant.now()
         );
+    }
+    @GetMapping("/")
+    public String home() {
+        return "Smart Job Tracker API is running";
     }
 }
