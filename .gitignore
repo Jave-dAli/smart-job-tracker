@@ -41,3 +41,6 @@ logs/
 
 # OS files
 .DS_Store
+
+# local config
+src/main/resources/application-local.yml

@@ -1,0 +1,10 @@
+DB_USERNAME: postgres
+DB_PASSWORD: postgres
+
+JWT_SECRET: 7iWlZ4Of9VeP2Ki8Ld3Vr6By1Ti5Ja0Uv8En4Fd9He2Re7Qk
+JWT_EXPIRATION: 86400000
+
+MAIL_HOST: smtp.gmail.com
+MAIL_PORT: 587
+MAIL_USERNAME: yourmail@gmail.com
+MAIL_PASSWORD: yourpassword
