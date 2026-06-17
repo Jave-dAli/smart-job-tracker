@@ -30,5 +30,5 @@ server:
   port: 8080
 
 jwt:
-  secret: "I am creating abra ka dabra the magician s3cr3t k3y"
+  secret: "7iWlZ4Of9VeP2Ki8Ld3Vr6By1Ti5Ja0Uv8En4Fd9He2Re7Qk"
   expiration: 86400000
