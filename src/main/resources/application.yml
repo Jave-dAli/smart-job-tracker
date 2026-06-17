@@ -1,34 +1,30 @@
 spring:
 
-  security:
-    user:
-      name: javed
-      password: j@123
-
   datasource:
     url: jdbc:postgresql://localhost:5432/smartjobtracker
-    username: postgres
-    password: postgres
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
 
   jpa:
     hibernate:
       ddl-auto: validate
-
     show-sql: true
 
   flyway:
     enabled: true
     baseline-on-migrate: true
 
-  mail:
-    host: smtp.example.com
-    port: 587
-    username: demo
-    password: demo
 
 server:
   port: 8080
 
+
 jwt:
-  secret: "7iWlZ4Of9VeP2Ki8Ld3Vr6By1Ti5Ja0Uv8En4Fd9He2Re7Qk"
-  expiration: 86400000
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}

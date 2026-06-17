@@ -24,6 +24,9 @@ public class ApplicationResponse {
     private String jobUrl;
     private String notes;
 
+    private Long resumeFileId;
+    private Long coverLetterFileId;
+
     private Instant createdAt;
     private Instant updatedAt;
 }

@@ -12,7 +12,11 @@ public interface ApplicationRepository extends JpaRepository<JobApplication, Lon
 
     List<JobApplication> findByUserId(Long userId);
 
+    List<JobApplication> findByUserIdAndDeletedAtIsNull(Long userId);
+
     Optional<JobApplication> findByIdAndUserId(Long id, Long userId);
+
+    Optional<JobApplication> findByIdAndUserIdAndDeletedAtIsNull(Long id, Long userId);
 
     long countByUserId(Long userId);
 }

@@ -1,5 +1,7 @@
 package com.javed.smartjobtracker.application.entity;
 
+import com.javed.smartjobtracker.common.exception.InvalidStatusTransitionException;
+
 public enum ApplicationStatus {
 
     APPLIED,
@@ -38,7 +40,7 @@ public enum ApplicationStatus {
 
     public void validateTransition(ApplicationStatus target) {
         if (!canTransitionTo(target)) {
-            throw new IllegalStateException(
+            throw new InvalidStatusTransitionException(
                     "Invalid status transition: " + this + " → " + target
             );
         }

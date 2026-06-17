@@ -1,6 +1,7 @@
 package com.javed.smartjobtracker.application.controller;
 
 import com.javed.smartjobtracker.application.dto.CreateApplicationRequest;
+import com.javed.smartjobtracker.application.dto.UpdateApplicationRequest;
 import com.javed.smartjobtracker.application.dto.ApplicationResponse;
 import com.javed.smartjobtracker.application.dto.UpdateStatusRequest;
 import com.javed.smartjobtracker.application.service.ApplicationService;
@@ -22,7 +23,7 @@ public class ApplicationController {
 
     @PostMapping
     public ResponseEntity<ApplicationResponse> create(
-            @RequestBody CreateApplicationRequest request
+            @Valid @RequestBody CreateApplicationRequest request
     ) {
 
         Long userId = securityUtils.getCurrentUserId();
@@ -74,5 +75,34 @@ public class ApplicationController {
                         request.getStatus()
                 )
         );
+    }
+
+
+    // UPDATE APPLICATION
+    @PutMapping("/{id}")
+    public ResponseEntity<ApplicationResponse> update(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateApplicationRequest request
+    ) {
+
+        Long userId = securityUtils.getCurrentUserId();
+
+        return ResponseEntity.ok(
+                service.update(id, userId, request)
+        );
+    }
+
+
+    // DELETE APPLICATION (SOFT DELETE)
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(
+            @PathVariable Long id
+    ) {
+
+        Long userId = securityUtils.getCurrentUserId();
+
+        service.delete(id, userId);
+
+        return ResponseEntity.noContent().build();
     }
 }
