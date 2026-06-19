@@ -11,6 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.javed.smartjobtracker.application.entity.ApplicationStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -33,14 +39,30 @@ public class ApplicationController {
         );
     }
 
-    // GET ALL MY APPLICATIONS
+    // GET ALL MY APPLICATIONS WITH PAGINATION, SORTING, AND FILTERING
     @GetMapping
-    public ResponseEntity<List<ApplicationResponse>> getMyApplications() {
+    public ResponseEntity<Page<ApplicationResponse>> getApplications(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String sort,
+            @RequestParam(defaultValue = "ASC") String direction,
+            @RequestParam(required = false) ApplicationStatus status,
+            @RequestParam(required = false) String company,
+            @RequestParam(required = false) LocalDate fromDate,
+            @RequestParam(required = false) LocalDate toDate
+    ) {
 
         Long userId = securityUtils.getCurrentUserId();
 
+        Sort sortObj = Sort.unsorted();
+        if (sort != null && !sort.trim().isEmpty()) {
+            Sort.Direction dir = Sort.Direction.fromString(direction.toUpperCase());
+            sortObj = Sort.by(dir, sort);
+        }
+        Pageable pageable = PageRequest.of(page, size, sortObj);
+
         return ResponseEntity.ok(
-                service.getMyApplications(userId)
+                service.getApplications(userId, status, company, fromDate, toDate, pageable)
         );
     }
 

@@ -8,9 +8,16 @@ import com.javed.smartjobtracker.application.entity.ApplicationStatus;
 import com.javed.smartjobtracker.application.repository.ApplicationRepository;
 import com.javed.smartjobtracker.common.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import com.javed.smartjobtracker.application.repository.ApplicationSpecification;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +51,47 @@ public class ApplicationService {
                 .stream()
                 .map(this::map)
                 .collect(Collectors.toList());
+    }
+
+    public Page<ApplicationResponse> getApplications(Long userId, ApplicationStatus status, String company, LocalDate fromDate, LocalDate toDate, Pageable pageable) {
+        Sort mappedSort = Sort.unsorted();
+        if (pageable.getSort().isSorted()) {
+            List<Sort.Order> mappedOrders = new ArrayList<>();
+            for (Sort.Order order : pageable.getSort()) {
+                String property = order.getProperty();
+                if (!property.equals("dateApplied") && !property.equals("companyName")
+                        && !property.equals("position") && !property.equals("createdAt")) {
+                    throw new IllegalArgumentException("Invalid sort field: " + property);
+                }
+                String mappedProperty = switch (property) {
+                    case "dateApplied" -> "applicationDate";
+                    case "position" -> "jobTitle";
+                    default -> property;
+                };
+                mappedOrders.add(new Sort.Order(order.getDirection(), mappedProperty));
+            }
+            mappedSort = Sort.by(mappedOrders);
+        }
+        Pageable mappedPageable = org.springframework.data.domain.PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                mappedSort
+        );
+
+        Specification<JobApplication> spec = Specification.where(ApplicationSpecification.hasUserId(userId))
+                .and(ApplicationSpecification.isNotDeleted());
+
+        if (status != null) {
+            spec = spec.and(ApplicationSpecification.hasStatus(status));
+        }
+        if (company != null && !company.trim().isEmpty()) {
+            spec = spec.and(ApplicationSpecification.hasCompany(company));
+        }
+        if (fromDate != null || toDate != null) {
+            spec = spec.and(ApplicationSpecification.hasDateBetween(fromDate, toDate));
+        }
+
+        return repository.findAll(spec, mappedPageable).map(this::map);
     }
 
     public ApplicationResponse updateStatus(Long id, Long userId, ApplicationStatus newStatus) {

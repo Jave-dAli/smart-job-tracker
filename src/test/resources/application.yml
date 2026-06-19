@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:15:///smartjobtracker
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+  mail:
+    host: localhost
+    port: 25
+    username: test
+    password: test
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  flyway:
+    enabled: true
+
+jwt:
+  secret: mysecretkeymysecretkeymysecretkey1234567890
+  expiration: 86400000
